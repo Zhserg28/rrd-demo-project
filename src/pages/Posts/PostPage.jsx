@@ -1,30 +1,29 @@
 import React from "react";
 // Librares
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 // Store
 import { loadingStatusSelector, postSelector } from "../../store/postsSlice";
 // Components
 import DateDisplay from "../../components/DateDisplay";
 import SpinnerLader from "../../components/SpinnerLoader";
-import StyledNavLink from "../../components/StyledNavLink";
-// Icons
-import { ChevronLeftIcon } from "@heroicons/react/solid";
+import BackButton from "../../components/BackButton";
 
 const PostPage = () => {
     const { postId } = useParams();
 
     const loadingStatus = useSelector(loadingStatusSelector());
     const post = useSelector(postSelector(postId));
+   
+    if(loadingStatus!=="pending" && loadingStatus!=="idle" && !post){
+        return <Navigate to="/posts"/>
+    }
 
     return (
         <>
             <div className='max-w-8xl mx-auto'>
-                <div className='flex px-4 pt-8 pb-10 lg:px-8 '>
-                    <StyledNavLink to='/posts' styleType='withIcon'>
-                        <ChevronLeftIcon className='h-6' />
-                        Go back
-                    </StyledNavLink>
+                <div className='flex px-4 pt-8 pb-10 lg:px-8 '>                    
+                    <BackButton>Go back</BackButton>
                 </div>
             </div>
             <div className='px-4 sm:px-6 md:px-9'>
